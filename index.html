@@ -1,0 +1,220 @@
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代理</title>
+    <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+</head>
+<style>
+    html,body{
+        padding: 0;
+        margin: 0;
+    }
+    .layui-inline,.layui-form-item{
+        margin-top: 10px;
+    }
+    #send_fun{
+        padding-right: 20px;
+    }
+    #send_fun .layui-form-item{
+        margin-bottom: 0;
+    }
+
+    .yc{
+        display: none !important;
+    }
+</style>
+<body>
+    <form class="layui-form" action="/send" id="send_fun" lay-filter="formTest">
+        <div class="layui-inline">
+            <label class="layui-form-label">网页端口</label>
+            <div class="layui-input-block" style="width: 80px;">
+              <input type="number" name="webport" value="3000"   placeholder="网页端口"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline yc" >
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block" style="width: 80px;">
+                <input type="number" name="longport" value="3020"   placeholder=""  class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-inline" >
+          <label class="layui-form-label">定时读代理</label>
+          <div class="layui-input-block" style="width: 60px;">
+            <input  type="number" name="times" value="30"  placeholder="定时获取代理ip n/秒"  class="layui-input">
+          </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">tcp连接超时</label>
+            <div class="layui-input-block" style="width: 50px;">
+              <input type="number" name="timeout" value="3" placeholder="tcp连接超时 n/秒"  class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">服务器ip</label>
+            <div class="layui-input-block"  style="width: 110px;">
+              <input type="text" name="ip" placeholder="服务器ip " value="127.0.0.1" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-inline">
+            <label class="layui-form-label">过期范围秒</label>
+            <div class="layui-input-inline" style="width: 60px;">
+              <input type="number" name="starttime" placeholder="随机过期秒数开始" value="120" class="layui-input">
+            </div>
+            <div class="layui-form-mid" style="display: inline-block;">-</div>
+            <div class="layui-input-inline" style="width: 60px;">
+              <input type="number" name="endtime" placeholder="随机过期秒数结束" value="180" class="layui-input">
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">读代理地址</label>
+            <div class="layui-input-block" >
+                <!-- <textarea name="url" placeholder="获取代理ip URL" class="layui-textarea">http://www.66ip.cn/areaindex_33/2.html</textarea> -->
+              <input type="text" name="url" value="http://www.66ip.cn/areaindex_33/2.html"   placeholder="获取代理ip URL"  class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-inline layui-form-text yc" style="display:inline-block ;">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <textarea name="bmd" placeholder="" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="" style="display:inline-block ; position: relative;top:15px;">
+            <div class="layui-inline yc" >
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="bmd_open" lay-skin="switch" lay-text="ON|OFF" lay-filter="switchTest" value="1">
+                </div>
+            </div>
+
+
+            <div class="layui-inline yc"  >
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block" >
+                    <input type="checkbox" name="longport_open" lay-skin="switch" lay-text="ON|OFF" lay-filter="switchTest" value="1">
+                </div>
+            </div>
+
+            <div class="layui-inline yc"  >
+                <label class="layui-form-label">随机端口</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="randport_open" lay-skin="switch" lay-text="ON|OFF" lay-filter="switchTest" value="1" checked>
+                </div>
+            </div>
+            <br>
+            <div class="layui-inline" >
+                <div class="layui-input-block">
+                  <button class="layui-btn" lay-submit="" lay-filter="formDemo" onclick="send();return false;">保存并重启</button>
+                  <button type="reset" class="layui-btn layui-btn-primary">重置默认</button>
+                  <button type="reset" class="layui-btn layui-btn-normal" onclick="location.reload();return false;">刷新</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+    <br>
+    <form action="/getProxy" target="_blank" style="display: inline-block;">
+        <div class="layui-inline">
+            <label class="layui-form-label">提取数量</label>
+            <div class="layui-input-block">
+              <input type="number" name="num" placeholder="数量  0为提取全部" value="0" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline" >
+            <div class="layui-input-block">
+                <button class="layui-btn  layui-btn-normal" lay-submit="" lay-filter="formDemo" onclick="">提取代理</button>
+            </div>
+        </div>
+
+    </form>
+    <form action=""  class="layui-form" lay-filter="formTest" style="display: inline-block;">
+        <div class="layui-inline">
+            <label class="layui-form-label">随机IP量:</label>
+            <div class="layui-input-block" style="width: 80px;">
+              <input type="number" name="proxys" value="" readonly  placeholder=""  style="border: none;" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline yc">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block" style="width: 80px;" style="width: 80px;">
+                <input type="number" name="ips" value="" readonly  placeholder="" style="border: none;"   class="layui-input">
+            </div>
+        </div>
+    </form>
+
+    <table id="demo" lay-filter="test"></table>
+</body>
+<script src="./js/jquery-3.1.1.js"></script>
+<script src="./layui/layui.js"></script>
+<script>
+    document.querySelector("bmd")
+</script>
+<script src="/conf.json"></script>
+<script>
+    const Url="http://localhost:3000/getInfo";
+    const dataOpen=[]
+  /*  $.ajax({
+        url: Url,
+        type:"post",
+        data:dataOpen,
+        success:function (result){
+            console.log(result);
+            this.dataOpen=result
+        }
+    })*/
+
+</script>
+<script>
+    function postOpen(){
+
+    }
+
+   /* function send() {
+        var obj = layui.form.val("formTest");
+        var ls = '',ll='?';
+        for (var k in obj) {
+            if (obj.hasOwnProperty(k)) {
+                ls=ls+ll+encodeURIComponent(k)+"="+encodeURIComponent(obj[k]);
+                ll='&';
+            }
+        }
+        var url = send_fun.getAttribute('action')+ls;
+        layer.open({
+            closeBtn :0,
+            type: 2,
+            content: Url //这里content是一个URL
+        });
+    }*/
+layui.use('table', function(){
+  var table = layui.table;
+
+  //第一个实例
+  table.render({
+    elem: '#demo'
+    ,url:"./data.json"
+    ,page: false //开启分页
+    ,cols: [[ //表头
+      {field: 'id', title: 'ID', width:50, sort: true, fixed: 'left', type:'numbers'}
+      ,{field: 'lod', title: '启动端口', width:90 }
+      ,{field: 'proxy', title: '二级代理',}
+      ,{field: 'ip_port', title: '中转后代理',}
+      ,{field: 'is_ok', title: '是否成功',  }
+      ,{field: 'is_use', title: '剩余秒数', width:130,sort:true}
+    ]]
+    ,data:dataOpen,
+  });
+});
+
+</script>
+
+</html>

@@ -1,0 +1,5 @@
+var conf = {"webport":"3000","longport":"3020","times":"30","timeout":"3","ip":"61.160.212.207","starttime":"60","endtime":"60","url":"http://www.qidiandaili.com/api.asp?key=20201112163825154472","getnum":"20","bmd":"","randport_open":"1","ips":0,"proxys":228};layui.form.val("formTest", conf);layui.form.render();
+
+getInfo:[
+      {id:1,lod:8821,}
+]
